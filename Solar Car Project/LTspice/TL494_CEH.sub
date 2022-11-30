@@ -1,0 +1,37 @@
+* TL494_CEH.asc
+*              1 2 3 4 5 6 7 8 9 10 11 12 13 14
+.subckt TL494_CEH DTC FB 1IN+ 1IN- 2IN+ 2IN- OC VCC C1 E1 RT CT REF GND
+Q4 C1 N002 E1 0 2N3904
+B5 N002 0 V=V(VCC)*0.5*(1-sgn(V(FB)-V(Vramp)))
+XU3 1IN+ 1IN- VCC GND N001 level.2 Avol=1Meg GBW=10Meg Slew=10Meg ilimit=25m rail=0 Vos=0 phimargin=45 en=0 enk=0 in=0 ink=0 Rin=500Meg
+XU4 2IN+ 2IN- VCC GND N003 level.2 Avol=1Meg GBW=10Meg Slew=10Meg ilimit=25m rail=0 Vos=0 phimargin=45 en=0 enk=0 in=0 ink=0 Rin=500Meg
+V2 N004 0 1
+R1 CT N004 100
+B1 Vc 0 V=-idt(I(R1))
+V3 N005 0 1
+R2 RT N005 1k
+B2 VR 0 V=V(RT)/(1-V(RT))
+B3 Vfreq 0 V=V(Vc)*V(VR)*1000
+B4 Vramp 0 V=V(REF)/V(Vfreq)*time-floor(time/V(Vfreq))*V(REF)
+V4 REF 0 5
+D1 N001 FB D
+D2 N003 FB D
+R3 DTC 0 50k
+R4 OC 0 50k
+.model D D
+******************************************
+* enter the full path name corresponding to the second LTspice folder that is installed (usually in Documents or My Documents)
+.lib C:\Users\EpicPC\OneDrive\Documents\LTspiceXVII\lib\cmp\standard.dio
+******************************************
+.model NPN NPN
+.model PNP PNP
+******************************************
+* enter full path name again here
+.lib C:\Users\EpicPC\OneDrive\Documents\LTspiceXVII\lib\cmp\standard.bjt
+******************************************
+.ic V(CT)=0
+.lib UniversalOpamps2.sub
+.backanno
+.end
+
+
